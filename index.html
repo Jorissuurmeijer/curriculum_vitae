@@ -4,32 +4,28 @@
     <meta charset="UTF-8" />
     <title>Joris Suurmeijer Résumé</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <!-- Google Font -->
     <link
       href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap"
       rel="stylesheet"
     />
     <style>
-      /* ===== Base styles ===== */
       * {
         box-sizing: border-box;
+        margin: 0;
+        padding: 0;
       }
       body {
         font-family: "Montserrat", sans-serif;
         line-height: 1.6;
-        margin: 0;
-        padding: 0;
         color: #333;
         background: #fafafa;
       }
-
-      /* Top bar */
       .topbar {
         display: flex;
         justify-content: center;
         gap: 12px;
         padding: 20px 0;
-        background: #ffffff;
+        background: #fff;
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
         position: sticky;
         top: 0;
@@ -50,96 +46,211 @@
         background: #0366d6;
         color: #fff;
       }
-
-      /* PDF viewer container */
-      .viewer-wrapper {
-        max-width: 960px;
-        margin: 40px auto;
-        padding: 0 16px;
+      main {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 0 20px 60px;
       }
-      .viewer-wrapper object {
-        width: 100%;
-        height: 100vh;
-        border: none;
-        border-radius: 12px;
-        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+      h1 {
+        font-size: 2.4rem;
+        margin-bottom: 4px;
       }
-
-      /* Fallback text */
-      .pdf-fallback {
-        text-align: center;
-        margin-top: 20px;
-      }
-      .pdf-fallback a {
+      h2 {
+        font-size: 1.5rem;
         color: #0366d6;
-        text-decoration: none;
+        margin: 40px 0 16px;
+      }
+      .section {
+        padding: 24px 0;
+        border-bottom: 1px solid #e5e5e5;
+      }
+      .section:last-child {
+        border-bottom: none;
+      }
+      .item {
+        margin-bottom: 16px;
+      }
+      .item h3 {
+        margin-bottom: 4px;
+        font-size: 1.15rem;
         font-weight: 600;
       }
-      .pdf-fallback a:hover {
+      .meta {
+        font-size: 0.9rem;
+        color: #666;
+        margin-bottom: 6px;
+      }
+      .skills ul {
+        display: flex;
+        flex-wrap: wrap;
+        list-style: none;
+        gap: 6px;
+      }
+      .skills li {
+        background: #e3f2fd;
+        border-radius: 4px;
+        padding: 4px 10px;
+        font-size: 0.85rem;
+      }
+      a {
+        color: #0366d6;
+        text-decoration: none;
+      }
+      a:hover {
         text-decoration: underline;
       }
-
-      @media (max-width: 600px) {
-        .lang-btn {
-          padding: 6px 12px;
-          font-size: 0.9rem;
+      @media print {
+        body {
+          background: #fff;
+          font-size: 12px;
+        }
+        main {
+          padding: 0;
+        }
+        h1 {
+          font-size: 28px;
+        }
+        h2 {
+          margin: 24px 0 12px;
+          font-size: 18px;
+        }
+        .topbar {
+          display: none;
         }
       }
     </style>
   </head>
   <body>
-    <!-- ===== Language Toggle Bar ===== -->
+    <!-- ===== Language Toggle ===== -->
     <nav class="topbar">
       <button id="btn-en" class="lang-btn active">English</button>
       <button id="btn-nl" class="lang-btn">Nederlands</button>
     </nav>
 
-    <!-- ===== PDF Viewer ===== -->
-    <main class="viewer-wrapper">
-      <object
-        id="pdfViewer"
-        data="resume_en.pdf#toolbar=0&navpanes=0&scrollbar=0&view=FitH"
-        type="application/pdf"
-        style="width: 100%; height: calc(100vh - 80px); border: none"
-      >
-        <div class="pdf-fallback">
-          <p>
-            Your browser can't display embedded PDFs. You can
-            <a id="pdfLink" href="resume_en.pdf" download
-              >download the résumé here</a
-            >.
-          </p>
-        </div>
-      </object>
-    </main>
+    <!-- ===== Résumé Container ===== -->
+    <main id="resume"></main>
 
     <script>
       const btnEn = document.getElementById("btn-en");
       const btnNl = document.getElementById("btn-nl");
-      const pdfViewer = document.getElementById("pdfViewer");
-      const pdfLink = document.getElementById("pdfLink");
+      const resumeCont = document.getElementById("resume");
 
-      function setLang(lang) {
-        const isNl = lang === "nl";
-        pdfViewer.data = isNl
-          ? "resume_nl.pdf#toolbar=0&navpanes=0&scrollbar=0&view=FitH"
-          : "resume_en.pdf#toolbar=0&navpanes=0&scrollbar=0&view=FitH";
-        pdfLink.href = isNl ? "resume_nl.pdf" : "resume_en.pdf";
-        pdfLink.textContent = isNl
-          ? "download het cv hier"
-          : "download the résumé here";
-        btnEn.classList.toggle("active", !isNl);
-        btnNl.classList.toggle("active", isNl);
-        document.documentElement.lang = lang;
-        // keep selection in URL hash for shareable links
-        history.replaceState(null, "", isNl ? "#nl" : "#en");
+      async function loadJSON(lang) {
+        const file = lang === "nl" ? "resume_nl.json" : "resume_en.json";
+        try {
+          const res = await fetch(file);
+          const data = await res.json();
+          renderResume(data);
+        } catch (err) {
+          resumeCont.innerHTML = `<p style="margin-top:40px;text-align:center">Unable to load résumé file <code>${file}</code>.</p>`;
+          console.error(err);
+        }
       }
 
+      function renderResume(cv) {
+        // === Header ===
+        let html = `<header class="section"><h1>${
+          cv.basics?.name || "Your Name"
+        }</h1><p>`;
+        if (cv.basics?.email)
+          html += `Email: <a href="mailto:${cv.basics.email}">${cv.basics.email}</a>`;
+        if (cv.basics?.url)
+          html += ` Website: <a href="${cv.basics.url}">${cv.basics.url.replace(
+            /^https?:\/\//,
+            ""
+          )}</a>`;
+        if (cv.basics?.location?.city) html += ` ${cv.basics.location.city}`;
+        html += `</p></header>`;
+
+        // === Profile ===
+        if (cv.basics?.summary)
+          html += `<section class="section"><h2>Profile</h2><p>${cv.basics.summary}</p></section>`;
+
+        // === Experience ===
+        if (cv.work?.length) {
+          html += `<section class="section"><h2>Experience</h2>`;
+          cv.work.forEach((w) => {
+            html += `<div class="item"><h3>${w.position || ""} - ${
+              w.name || ""
+            }</h3>`;
+            html += `<p class="meta">${w.location || ""} - ${formatDate(
+              w.startDate
+            )} - ${formatDate(w.endDate) || "Present"}</p>`;
+            if (w.highlights?.length) {
+              html +=
+                "<ul>" +
+                w.highlights.map((h) => `<li>${h}</li>`).join("") +
+                "</ul>";
+            }
+            html += `</div>`;
+          });
+          html += `</section>`;
+        }
+
+        // === Education ===
+        if (cv.education?.length) {
+          html += `<section class="section"><h2>Education</h2>`;
+          cv.education.forEach((ed) => {
+            html += `<div class="item"><h3>${ed.institution || ""} - ${
+              ed.studyType || ed.area || ""
+            }</h3>`;
+            html += `<p class="meta">${formatDate(ed.startDate)} - ${formatDate(
+              ed.endDate
+            )}</p></div>`;
+          });
+          html += `</section>`;
+        }
+
+        // === Skills ===
+        if (cv.skills?.length) {
+          html += `<section class="section skills"><h2>Skills</h2><ul>`;
+          cv.skills.forEach((s) => {
+            html += `<li>${s.name}</li>`;
+          });
+          html += `</ul></section>`;
+        }
+
+        // === Projects ===
+        if (cv.projects?.length) {
+          html += `<section class="section"><h2>Projects</h2>`;
+          cv.projects.forEach((p) => {
+            html += `<div class="item"><h3>${p.name}</h3>`;
+            if (p.url)
+              html += `<p class="meta"><a href="${p.url}">${p.url.replace(
+                /^https?:\/\//,
+                ""
+              )}</a></p>`;
+            if (p.description) html += `<p>${p.description}</p>`;
+            html += `</div>`;
+          });
+          html += `</section>`;
+        }
+
+        resumeCont.innerHTML = html;
+      }
+
+      function formatDate(d) {
+        if (!d) return "";
+        return new Date(d).toLocaleDateString(undefined, {
+          year: "numeric",
+          month: "short",
+        });
+      } // simple
+
+      function setLang(lang) {
+        document.documentElement.lang = lang;
+        btnEn.classList.toggle("active", lang === "en");
+        btnNl.classList.toggle("active", lang === "nl");
+        history.replaceState(null, "", lang === "nl" ? "#nl" : "#en");
+        loadJSON(lang);
+      }
+
+      // Event listeners
       btnEn.addEventListener("click", () => setLang("en"));
       btnNl.addEventListener("click", () => setLang("nl"));
 
-      // Auto-switch if URL ends with #nl or #en
-      if (location.hash === "#nl") setLang("nl");
+      // Initial load
+      setLang(location.hash === "#nl" ? "nl" : "en");
     </script>
   </body>
 </html>
