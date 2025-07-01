@@ -1,0 +1,374 @@
+{
+  "basics": {
+    "name": "Joris Suurmeijer",
+    "headline": "",
+    "email": "jorissuurmeijer@gmail.com",
+    "phone": "",
+    "location": "Groningen",
+    "url": {
+      "label": "Linkedin",
+      "href": "https://linkedin.com/in/joris-suurmeijer-a69a39257"
+    },
+    "customFields": [
+      {
+        "id": "tdfyo61nj8r1l47vcepx7pu9",
+        "icon": "link",
+        "name": "Website",
+        "value": "https://jorissuurmeijer.github.io/curriculum_vitae"
+      }
+    ],
+    "picture": {
+      "url": "https://storage.rxresu.me/cmcki7yb80efw1980erkeoydo/pictures/wntctvrgbkpmhmwkifn4ljl7.jpg",
+      "size": 64,
+      "aspectRatio": 1,
+      "borderRadius": 9999,
+      "effects": {
+        "hidden": false,
+        "border": false,
+        "grayscale": true
+      }
+    }
+  },
+  "sections": {
+    "summary": {
+      "name": "Summary",
+      "columns": 1,
+      "separateLinks": true,
+      "visible": true,
+      "id": "summary",
+      "content": "<p>Bachelor's and Master's in Artificial Intelligence van de Rijksuniversiteit Groningen. </p><p>Werkevaring als expertiselead van het studenten team software developers binnen ICT for Education aan de Rijksuniversiteit Groningen.</p>"
+    },
+    "awards": {
+      "name": "Awards",
+      "columns": 1,
+      "separateLinks": true,
+      "visible": true,
+      "id": "awards",
+      "items": []
+    },
+    "certifications": {
+      "name": "Certifications",
+      "columns": 1,
+      "separateLinks": true,
+      "visible": true,
+      "id": "certifications",
+      "items": []
+    },
+    "education": {
+      "name": "Education",
+      "columns": 1,
+      "separateLinks": true,
+      "visible": true,
+      "id": "education",
+      "items": [
+        {
+          "id": "lhfqpmcsotbju193iqfow66z",
+          "visible": true,
+          "institution": "University of Groningen",
+          "studyType": "Master",
+          "area": "Artificial Intelligence",
+          "score": "",
+          "date": "2024 - 2026",
+          "summary": "",
+          "url": {
+            "label": "",
+            "href": ""
+          }
+        },
+        {
+          "id": "lkvg8m9sl00khjnhnfugfuou",
+          "visible": true,
+          "institution": "University of Groningen",
+          "studyType": "Bachelor",
+          "area": "Artificial Intelligence",
+          "score": "",
+          "date": "2020 - 2024",
+          "summary": "<p>Bachelor's scriptie: Uncertainty Quantification for Motor Imagery Brain-Computer Interfaces<br>gepubliceerd in IEEE MLSP en becijferd met een 8.5</p>",
+          "url": {
+            "label": "",
+            "href": ""
+          }
+        },
+        {
+          "id": "hwl46l3zy1nc7q79dc8mn4ui",
+          "visible": true,
+          "institution": "Praedinius Gymnasium",
+          "studyType": "Gymnasium N+T",
+          "area": "",
+          "score": "",
+          "date": "2014-2020",
+          "summary": "",
+          "url": {
+            "label": "",
+            "href": ""
+          }
+        }
+      ]
+    },
+    "experience": {
+      "name": "Experience",
+      "columns": 1,
+      "separateLinks": true,
+      "visible": true,
+      "id": "experience",
+      "items": [
+        {
+          "id": "dl65dg29setx52wpmvumg4ls",
+          "visible": true,
+          "company": "University of Groningen",
+          "position": "Lead student software developer",
+          "location": "Groningen",
+          "date": "February 2025 - Present",
+          "summary": "<p>Aansturen van de studenten developers bij het team van ICT for Education.<br>Eerste aanspreekpunt van de expertise development en coordinator voor de desbetreffende applicaties.</p>",
+          "url": {
+            "label": "",
+            "href": ""
+          }
+        },
+        {
+          "id": "vhyc0fpqa87jh1scq06sjoge",
+          "visible": true,
+          "company": "University of Groningen",
+          "position": "Student software developer",
+          "location": "Groningen",
+          "date": "February 2023 - Present",
+          "summary": "<p>Developen en deployen van een tal van applicaties met een klein studenten team binnen ICT for Education bij de Universiteit van Groningen.</p>",
+          "url": {
+            "label": "",
+            "href": ""
+          }
+        },
+        {
+          "id": "d2mhvs3lr9ar9dtw5gftzwyc",
+          "visible": true,
+          "company": "Snowlimits Skicentrum",
+          "position": "Skileraar",
+          "location": "Groningen",
+          "date": "2018 - Present",
+          "summary": "<p>Skilesgeven in het Nederlands, Engels en Duits</p>",
+          "url": {
+            "label": "",
+            "href": ""
+          }
+        }
+      ]
+    },
+    "volunteer": {
+      "name": "Volunteering",
+      "columns": 1,
+      "separateLinks": true,
+      "visible": true,
+      "id": "volunteer",
+      "items": []
+    },
+    "interests": {
+      "name": "Interests",
+      "columns": 1,
+      "separateLinks": true,
+      "visible": false,
+      "id": "interests",
+      "items": [
+        {
+          "id": "shfpehcs8lzq9rprvsdrawmg",
+          "visible": true,
+          "name": "Machine Learning",
+          "keywords": []
+        },
+        {
+          "id": "tn9ryfugx5exqr2m7fvrisy2",
+          "visible": true,
+          "name": "Responsible and Explainable AI",
+          "keywords": []
+        }
+      ]
+    },
+    "languages": {
+      "name": "Languages",
+      "columns": 1,
+      "separateLinks": true,
+      "visible": false,
+      "id": "languages",
+      "items": [
+        {
+          "id": "wdolxin4j8wm5xg4rpfjvdsr",
+          "visible": true,
+          "name": "Dutch",
+          "description": "",
+          "level": 5
+        },
+        {
+          "id": "g7fjid9ilymz1xqj450gyhc3",
+          "visible": true,
+          "name": "English",
+          "description": "",
+          "level": 5
+        }
+      ]
+    },
+    "profiles": {
+      "name": "Profiles",
+      "columns": 1,
+      "separateLinks": true,
+      "visible": true,
+      "id": "profiles",
+      "items": []
+    },
+    "projects": {
+      "name": "Projects",
+      "columns": 1,
+      "separateLinks": true,
+      "visible": true,
+      "id": "projects",
+      "items": []
+    },
+    "publications": {
+      "name": "Publications",
+      "columns": 1,
+      "separateLinks": true,
+      "visible": true,
+      "id": "publications",
+      "items": [
+        {
+          "id": "kkg6sonan1x7i1gwln21pq2s",
+          "visible": true,
+          "name": "Uncertainty Quantification for Motor Imagery Brain-computer Interfaces",
+          "publisher": "IEEE MLSP",
+          "date": "July 2025",
+          "summary": "",
+          "url": {
+            "label": "",
+            "href": ""
+          }
+        }
+      ]
+    },
+    "references": {
+      "name": "References",
+      "columns": 1,
+      "separateLinks": true,
+      "visible": true,
+      "id": "references",
+      "items": []
+    },
+    "skills": {
+      "name": "Skills",
+      "columns": 1,
+      "separateLinks": true,
+      "visible": true,
+      "id": "skills",
+      "items": [
+        {
+          "id": "w2pd6zjzczcvajaprvyx9uwb",
+          "visible": true,
+          "name": "Machine Learning",
+          "description": "",
+          "level": 5,
+          "keywords": []
+        },
+        {
+          "id": "ienav182yv5by6s96c42ip4w",
+          "visible": true,
+          "name": "AI development/engineering",
+          "description": "",
+          "level": 5,
+          "keywords": []
+        },
+        {
+          "id": "s4fmhbetmz7j9urwqzqhsfa0",
+          "visible": true,
+          "name": "Responsible and Explainable AI",
+          "description": "",
+          "level": 5,
+          "keywords": []
+        },
+        {
+          "id": "sygdxly6884ae2crg3rbcipl",
+          "visible": true,
+          "name": "Uncertainty quantification",
+          "description": "",
+          "level": 5,
+          "keywords": []
+        },
+        {
+          "id": "zla2qzltq630zf2k4vtfiqqj",
+          "visible": true,
+          "name": "Programming",
+          "description": "",
+          "level": 5,
+          "keywords": [
+            "Python",
+            "Java",
+            "C++",
+            "Keras",
+            "PyTorch",
+            "Numpy",
+            "Pandas",
+            "Javascript",
+            "React",
+            "Spring Boot",
+            "SQL",
+            "Kubernetes",
+            "Azure",
+            "Typescript"
+          ]
+        }
+      ]
+    },
+    "custom": {}
+  },
+  "metadata": {
+    "template": "gengar",
+    "layout": [
+      [
+        [
+          "profiles",
+          "summary",
+          "experience",
+          "education",
+          "projects",
+          "volunteer",
+          "references"
+        ],
+        [
+          "languages",
+          "skills",
+          "publications",
+          "interests",
+          "certifications",
+          "awards"
+        ]
+      ]
+    ],
+    "css": {
+      "value": "* {\n\toutline: 1px solid #000;\n\toutline-offset: 4px;\n}",
+      "visible": false
+    },
+    "page": {
+      "margin": 18,
+      "format": "a4",
+      "options": {
+        "breakLine": true,
+        "pageNumbers": true
+      }
+    },
+    "theme": {
+      "background": "#fdfdfd",
+      "text": "#000000",
+      "primary": "#16a34a"
+    },
+    "typography": {
+      "font": {
+        "family": "IBM Plex Serif",
+        "subset": "latin",
+        "variants": [
+          "regular"
+        ],
+        "size": 14
+      },
+      "lineHeight": 1.4,
+      "hideIcons": false,
+      "underlineLinks": true
+    },
+    "notes": ""
+  }
+}
