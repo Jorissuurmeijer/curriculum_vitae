@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Joris Suurmeijer Résumé</title>
+    <title>Joris Suurmeijer - Résumé</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link
       href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap"
@@ -35,7 +35,7 @@
         justify-content: center;
         gap: 12px;
         padding: 18px 0;
-        background: #ffffff;
+        background: #fff;
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
         position: sticky;
         top: 0;
@@ -109,6 +109,22 @@
         font-size: 0.85rem;
       }
 
+      /* Avatar */
+      .header-wrap {
+        display: flex;
+        gap: 24px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      .avatar {
+        width: 140px;
+        height: 140px;
+        border-radius: 50%;
+        object-fit: cover;
+        filter: grayscale(100%);
+        flex-shrink: 0;
+      }
+
       /* Print */
       @media print {
         body {
@@ -127,6 +143,10 @@
         }
         .topbar {
           display: none;
+        }
+        .avatar {
+          width: 100px;
+          height: 100px;
         }
       }
     </style>
@@ -147,7 +167,7 @@
       const resumeCont = document.getElementById("resume");
 
       async function loadJSON(lang) {
-        const file = `resume_${lang}.json`; // e.g. resume_en.json
+        const file = `resume_${lang}.json`;
         try {
           const res = await fetch(file);
           if (!res.ok)
@@ -160,40 +180,43 @@
         }
       }
 
-      function html(text) {
-        return text || "";
-      }
-
       function addSection(title, inner) {
         return `<section class="section"><h2>${title}</h2>${inner}</section>`;
       }
 
       function renderResume(cv) {
-        let htmlOut = "";
+        let html = "";
         const basics = cv.basics || {};
+        const picture = basics.picture?.url || "";
 
         /* ===== Header ===== */
-        htmlOut += `<header class="section"><h1>${basics.name || ""}</h1><p>`;
+        html += `<header class="section"><div class="header-wrap">`;
+        if (picture) {
+          html += `<img class="avatar" src="${picture}" alt="${
+            basics.name || "Profile photo"
+          }">`;
+        }
+        html += `<div><h1>${basics.name || ""}</h1><p>`;
         if (basics.email)
-          htmlOut += `Email: <a href="mailto:${basics.email}">${basics.email}</a>`;
+          html += `Email: <a href="mailto:${basics.email}">${basics.email}</a>`;
         if (basics.url?.href)
-          htmlOut += ` · <a href="${basics.url.href}">${
+          html += ` · <a href="${basics.url.href}">${
             basics.url.label || basics.url.href.replace(/^https?:\/\//, "")
           }</a>`;
-        if (basics.location) htmlOut += ` · ${basics.location}`;
+        if (basics.location) html += ` · ${basics.location}`;
         basics.customFields?.forEach((cf) => {
           if (cf.value)
-            htmlOut += ` · <a href="${cf.value}">${
+            html += ` · <a href="${cf.value}">${
               cf.name || cf.value.replace(/^https?:\/\//, "")
             }</a>`;
         });
-        htmlOut += "</p></header>";
+        html += "</p></div></div></header>";
 
         const sections = cv.sections || {};
 
         /* ===== Summary ===== */
         if (sections.summary?.visible && sections.summary.content) {
-          htmlOut += addSection(
+          html += addSection(
             sections.summary.name || "Summary",
             sections.summary.content
           );
@@ -214,10 +237,7 @@
             if (item.summary) inner += item.summary;
             inner += "</div>";
           });
-          htmlOut += addSection(
-            sections.experience.name || "Experience",
-            inner
-          );
+          html += addSection(sections.experience.name || "Experience", inner);
         }
 
         /* ===== Education ===== */
@@ -235,7 +255,7 @@
             if (ed.summary) inner += ed.summary;
             inner += "</div>";
           });
-          htmlOut += addSection(sections.education.name || "Education", inner);
+          html += addSection(sections.education.name || "Education", inner);
         }
 
         /* ===== Skills ===== */
@@ -250,7 +270,7 @@
               )
               .join("") +
             `</ul></div>`;
-          htmlOut += addSection(sections.skills.name || "Skills", inner);
+          html += addSection(sections.skills.name || "Skills", inner);
         }
 
         /* ===== Publications ===== */
@@ -272,7 +292,7 @@
               }</a></p>`;
             inner += "</div>";
           });
-          htmlOut += addSection(
+          html += addSection(
             sections.publications.name || "Publications",
             inner
           );
@@ -291,10 +311,10 @@
             if (p.summary) inner += p.summary;
             inner += "</div>";
           });
-          htmlOut += addSection(sections.projects.name || "Projects", inner);
+          html += addSection(sections.projects.name || "Projects", inner);
         }
 
-        /* ===== Awards / Certifications / Volunteer / References (optional) ===== */
+        /* ===== Optional Sections ===== */
         const optional = [
           ["awards", "Awards"],
           ["certifications", "Certifications"],
@@ -317,11 +337,11 @@
                   "</div>";
               });
             if (sec.content) inner += sec.content;
-            htmlOut += addSection(sec.name || fallback, inner);
+            html += addSection(sec.name || fallback, inner);
           }
         });
 
-        resumeCont.innerHTML = htmlOut;
+        resumeCont.innerHTML = html;
       }
 
       function setLang(lang) {
@@ -332,11 +352,10 @@
         loadJSON(lang);
       }
 
-      // Event Listeners
       btnEn.addEventListener("click", () => setLang("en"));
       btnNl.addEventListener("click", () => setLang("nl"));
 
-      // Auto-load based on URL hash
+      // initial
       setLang(location.hash === "#nl" ? "nl" : "en");
     </script>
   </body>
