@@ -9,6 +9,7 @@
       rel="stylesheet"
     />
     <style>
+      /* ===== Base styles ===== */
       * {
         box-sizing: border-box;
         margin: 0;
@@ -20,12 +21,21 @@
         color: #333;
         background: #fafafa;
       }
+      a {
+        color: #0366d6;
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+
+      /* Top bar */
       .topbar {
         display: flex;
         justify-content: center;
         gap: 12px;
-        padding: 20px 0;
-        background: #fff;
+        padding: 18px 0;
+        background: #ffffff;
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
         position: sticky;
         top: 0;
@@ -46,22 +56,24 @@
         background: #0366d6;
         color: #fff;
       }
+
+      /* Résumé container */
       main {
         max-width: 900px;
         margin: 0 auto;
         padding: 0 20px 60px;
       }
       h1 {
-        font-size: 2.4rem;
+        font-size: 2.1rem;
         margin-bottom: 4px;
       }
       h2 {
-        font-size: 1.5rem;
+        font-size: 1.4rem;
         color: #0366d6;
-        margin: 40px 0 16px;
+        margin: 36px 0 14px;
       }
       .section {
-        padding: 24px 0;
+        padding: 22px 0;
         border-bottom: 1px solid #e5e5e5;
       }
       .section:last-child {
@@ -72,7 +84,7 @@
       }
       .item h3 {
         margin-bottom: 4px;
-        font-size: 1.15rem;
+        font-size: 1.1rem;
         font-weight: 600;
       }
       .meta {
@@ -80,11 +92,15 @@
         color: #666;
         margin-bottom: 6px;
       }
+      ul.bullets {
+        list-style: disc;
+        margin-left: 20px;
+      }
       .skills ul {
         display: flex;
         flex-wrap: wrap;
-        list-style: none;
         gap: 6px;
+        list-style: none;
       }
       .skills li {
         background: #e3f2fd;
@@ -92,13 +108,8 @@
         padding: 4px 10px;
         font-size: 0.85rem;
       }
-      a {
-        color: #0366d6;
-        text-decoration: none;
-      }
-      a:hover {
-        text-decoration: underline;
-      }
+
+      /* Print */
       @media print {
         body {
           background: #fff;
@@ -108,11 +119,11 @@
           padding: 0;
         }
         h1 {
-          font-size: 28px;
+          font-size: 24px;
         }
         h2 {
+          font-size: 16px;
           margin: 24px 0 12px;
-          font-size: 18px;
         }
         .topbar {
           display: none;
@@ -121,7 +132,7 @@
     </style>
   </head>
   <body>
-    <!-- ===== Language Toggle ===== -->
+    <!-- ===== Language Toggle Bar ===== -->
     <nav class="topbar">
       <button id="btn-en" class="lang-btn active">English</button>
       <button id="btn-nl" class="lang-btn">Nederlands</button>
@@ -136,120 +147,196 @@
       const resumeCont = document.getElementById("resume");
 
       async function loadJSON(lang) {
-        const file = lang === "nl" ? "resume_nl.json" : "resume_en.json";
+        const file = `resume_${lang}.json`; // e.g. resume_en.json
         try {
           const res = await fetch(file);
+          if (!res.ok)
+            throw new Error(`${file} not found (HTTP ${res.status})`);
           const data = await res.json();
           renderResume(data);
         } catch (err) {
-          resumeCont.innerHTML = `<p style="margin-top:40px;text-align:center">Unable to load résumé file <code>${file}</code>.</p>`;
+          resumeCont.innerHTML = `<p style="margin-top:40px;text-align:center">Unable to load <code>${file}</code>.<br>${err.message}</p>`;
           console.error(err);
         }
       }
 
-      function renderResume(cv) {
-        // === Header ===
-        let html = `<header class="section"><h1>${
-          cv.basics?.name || "Your Name"
-        }</h1><p>`;
-        if (cv.basics?.email)
-          html += `Email: <a href="mailto:${cv.basics.email}">${cv.basics.email}</a>`;
-        if (cv.basics?.url)
-          html += ` Website: <a href="${cv.basics.url}">${cv.basics.url.replace(
-            /^https?:\/\//,
-            ""
-          )}</a>`;
-        if (cv.basics?.location?.city) html += ` ${cv.basics.location.city}`;
-        html += `</p></header>`;
-
-        // === Profile ===
-        if (cv.basics?.summary)
-          html += `<section class="section"><h2>Profile</h2><p>${cv.basics.summary}</p></section>`;
-
-        // === Experience ===
-        if (cv.work?.length) {
-          html += `<section class="section"><h2>Experience</h2>`;
-          cv.work.forEach((w) => {
-            html += `<div class="item"><h3>${w.position || ""} - ${
-              w.name || ""
-            }</h3>`;
-            html += `<p class="meta">${w.location || ""} - ${formatDate(
-              w.startDate
-            )} - ${formatDate(w.endDate) || "Present"}</p>`;
-            if (w.highlights?.length) {
-              html +=
-                "<ul>" +
-                w.highlights.map((h) => `<li>${h}</li>`).join("") +
-                "</ul>";
-            }
-            html += `</div>`;
-          });
-          html += `</section>`;
-        }
-
-        // === Education ===
-        if (cv.education?.length) {
-          html += `<section class="section"><h2>Education</h2>`;
-          cv.education.forEach((ed) => {
-            html += `<div class="item"><h3>${ed.institution || ""} - ${
-              ed.studyType || ed.area || ""
-            }</h3>`;
-            html += `<p class="meta">${formatDate(ed.startDate)} - ${formatDate(
-              ed.endDate
-            )}</p></div>`;
-          });
-          html += `</section>`;
-        }
-
-        // === Skills ===
-        if (cv.skills?.length) {
-          html += `<section class="section skills"><h2>Skills</h2><ul>`;
-          cv.skills.forEach((s) => {
-            html += `<li>${s.name}</li>`;
-          });
-          html += `</ul></section>`;
-        }
-
-        // === Projects ===
-        if (cv.projects?.length) {
-          html += `<section class="section"><h2>Projects</h2>`;
-          cv.projects.forEach((p) => {
-            html += `<div class="item"><h3>${p.name}</h3>`;
-            if (p.url)
-              html += `<p class="meta"><a href="${p.url}">${p.url.replace(
-                /^https?:\/\//,
-                ""
-              )}</a></p>`;
-            if (p.description) html += `<p>${p.description}</p>`;
-            html += `</div>`;
-          });
-          html += `</section>`;
-        }
-
-        resumeCont.innerHTML = html;
+      function html(text) {
+        return text || "";
       }
 
-      function formatDate(d) {
-        if (!d) return "";
-        return new Date(d).toLocaleDateString(undefined, {
-          year: "numeric",
-          month: "short",
+      function addSection(title, inner) {
+        return `<section class="section"><h2>${title}</h2>${inner}</section>`;
+      }
+
+      function renderResume(cv) {
+        let htmlOut = "";
+        const basics = cv.basics || {};
+
+        /* ===== Header ===== */
+        htmlOut += `<header class="section"><h1>${basics.name || ""}</h1><p>`;
+        if (basics.email)
+          htmlOut += `Email: <a href="mailto:${basics.email}">${basics.email}</a>`;
+        if (basics.url?.href)
+          htmlOut += `  <a href="${basics.url.href}">${
+            basics.url.label || basics.url.href.replace(/^https?:\/\//, "")
+          }</a>`;
+        if (basics.location) htmlOut += `  ${basics.location}`;
+        basics.customFields?.forEach((cf) => {
+          if (cf.value)
+            htmlOut += ` · <a href="${cf.value}">${
+              cf.name || cf.value.replace(/^https?:\/\//, "")
+            }</a>`;
         });
-      } // simple
+        htmlOut += "</p></header>";
+
+        const sections = cv.sections || {};
+
+        /* ===== Summary ===== */
+        if (sections.summary?.visible && sections.summary.content) {
+          htmlOut += addSection(
+            sections.summary.name || "Summary",
+            sections.summary.content
+          );
+        }
+
+        /* ===== Experience ===== */
+        if (sections.experience?.visible && sections.experience.items?.length) {
+          let inner = "";
+          sections.experience.items.forEach((item) => {
+            if (!item.visible) return;
+            inner += `<div class="item"><h3>${item.position || ""} - ${
+              item.company || ""
+            }</h3>`;
+            if (item.location || item.date)
+              inner += `<p class="meta">${[item.location, item.date]
+                .filter(Boolean)
+                .join(" - ")}</p>`;
+            if (item.summary) inner += item.summary;
+            inner += "</div>";
+          });
+          htmlOut += addSection(
+            sections.experience.name || "Experience",
+            inner
+          );
+        }
+
+        /* ===== Education ===== */
+        if (sections.education?.visible && sections.education.items?.length) {
+          let inner = "";
+          sections.education.items.forEach((ed) => {
+            if (!ed.visible) return;
+            inner += `<div class="item"><h3>${ed.institution || ""} - ${
+              ed.studyType || ed.area || ""
+            }</h3>`;
+            if (ed.area || ed.date)
+              inner += `<p class="meta">${[ed.area, ed.date]
+                .filter(Boolean)
+                .join(" - ")}</p>`;
+            if (ed.summary) inner += ed.summary;
+            inner += "</div>";
+          });
+          htmlOut += addSection(sections.education.name || "Education", inner);
+        }
+
+        /* ===== Skills ===== */
+        if (sections.skills?.visible && sections.skills.items?.length) {
+          const inner =
+            `<div class="skills"><ul>` +
+            sections.skills.items
+              .filter((s) => s.visible)
+              .map(
+                (s) =>
+                  `<li title="${(s.keywords || []).join(", ")}">${s.name}</li>`
+              )
+              .join("") +
+            `</ul></div>`;
+          htmlOut += addSection(sections.skills.name || "Skills", inner);
+        }
+
+        /* ===== Publications ===== */
+        if (
+          sections.publications?.visible &&
+          sections.publications.items?.length
+        ) {
+          let inner = "";
+          sections.publications.items.forEach((pub) => {
+            if (!pub.visible) return;
+            inner += `<div class="item"><h3>${pub.name}</h3>`;
+            if (pub.date || pub.publisher)
+              inner += `<p class="meta">${[pub.publisher, pub.date]
+                .filter(Boolean)
+                .join(" - ")}</p>`;
+            if (pub.url?.href)
+              inner += `<p><a href="${pub.url.href}">${
+                pub.url.label || pub.url.href
+              }</a></p>`;
+            inner += "</div>";
+          });
+          htmlOut += addSection(
+            sections.publications.name || "Publications",
+            inner
+          );
+        }
+
+        /* ===== Projects ===== */
+        if (sections.projects?.visible && sections.projects.items?.length) {
+          let inner = "";
+          sections.projects.items.forEach((p) => {
+            if (!p.visible) return;
+            inner += `<div class="item"><h3>${p.name}</h3>`;
+            if (p.url?.href)
+              inner += `<p class="meta"><a href="${p.url.href}">${
+                p.url.label || p.url.href.replace(/^https?:\/\//, "")
+              }</a></p>`;
+            if (p.summary) inner += p.summary;
+            inner += "</div>";
+          });
+          htmlOut += addSection(sections.projects.name || "Projects", inner);
+        }
+
+        /* ===== Awards / Certifications / Volunteer / References (optional) ===== */
+        const optional = [
+          ["awards", "Awards"],
+          ["certifications", "Certifications"],
+          ["volunteer", "Volunteering"],
+          ["references", "References"],
+        ];
+        optional.forEach(([key, fallback]) => {
+          const sec = sections[key];
+          if (
+            sec?.visible &&
+            ((sec.items && sec.items.length) || sec.content)
+          ) {
+            let inner = "";
+            if (sec.items)
+              sec.items.forEach((it) => {
+                if (!it.visible) return;
+                inner +=
+                  `<div class="item"><h3>${it.name || it.title || ""}</h3>` +
+                  (it.summary || "") +
+                  "</div>";
+              });
+            if (sec.content) inner += sec.content;
+            htmlOut += addSection(sec.name || fallback, inner);
+          }
+        });
+
+        resumeCont.innerHTML = htmlOut;
+      }
 
       function setLang(lang) {
-        document.documentElement.lang = lang;
+        document.documentElement.lang = lang === "nl" ? "nl" : "en";
         btnEn.classList.toggle("active", lang === "en");
         btnNl.classList.toggle("active", lang === "nl");
-        history.replaceState(null, "", lang === "nl" ? "#nl" : "#en");
+        history.replaceState(null, "", `#${lang}`);
         loadJSON(lang);
       }
 
-      // Event listeners
+      // Event Listeners
       btnEn.addEventListener("click", () => setLang("en"));
       btnNl.addEventListener("click", () => setLang("nl"));
 
-      // Initial load
+      // Auto-load based on URL hash
       setLang(location.hash === "#nl" ? "nl" : "en");
     </script>
   </body>
