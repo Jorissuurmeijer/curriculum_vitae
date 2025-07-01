@@ -2,13 +2,15 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Joris Suurmeijer Resume</title>
+    <title>Joris Suurmeijer Résumé</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Google Font -->
     <link
       href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap"
       rel="stylesheet"
     />
     <style>
+      /* ===== Base styles ===== */
       * {
         box-sizing: border-box;
       }
@@ -94,12 +96,17 @@
 
     <!-- ===== PDF Viewer ===== -->
     <main class="viewer-wrapper">
-      <object id="pdfViewer" data="resume_en.pdf" type="application/pdf">
+      <object
+        id="pdfViewer"
+        data="resume_en.pdf#toolbar=0&navpanes=0&scrollbar=0&view=FitH"
+        type="application/pdf"
+        style="width: 100%; height: calc(100vh - 80px); border: none"
+      >
         <div class="pdf-fallback">
           <p>
             Your browser can't display embedded PDFs. You can
             <a id="pdfLink" href="resume_en.pdf" download
-              >download the resumé here</a
+              >download the résumé here</a
             >.
           </p>
         </div>
@@ -114,15 +121,16 @@
 
       function setLang(lang) {
         const isNl = lang === "nl";
-        pdfViewer.data = isNl ? "resume_nl.pdf" : "resume_en.pdf";
+        pdfViewer.data = isNl
+          ? "resume_nl.pdf#toolbar=0&navpanes=0&scrollbar=0&view=FitH"
+          : "resume_en.pdf#toolbar=0&navpanes=0&scrollbar=0&view=FitH";
         pdfLink.href = isNl ? "resume_nl.pdf" : "resume_en.pdf";
         pdfLink.textContent = isNl
           ? "download het cv hier"
-          : "download the resumé here";
+          : "download the résumé here";
         btnEn.classList.toggle("active", !isNl);
         btnNl.classList.toggle("active", isNl);
         document.documentElement.lang = lang;
-
         // keep selection in URL hash for shareable links
         history.replaceState(null, "", isNl ? "#nl" : "#en");
       }
