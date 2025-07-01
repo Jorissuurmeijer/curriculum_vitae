@@ -177,10 +177,10 @@
         if (basics.email)
           htmlOut += `Email: <a href="mailto:${basics.email}">${basics.email}</a>`;
         if (basics.url?.href)
-          htmlOut += `  <a href="${basics.url.href}">${
+          htmlOut += ` · <a href="${basics.url.href}">${
             basics.url.label || basics.url.href.replace(/^https?:\/\//, "")
           }</a>`;
-        if (basics.location) htmlOut += `  ${basics.location}`;
+        if (basics.location) htmlOut += ` · ${basics.location}`;
         basics.customFields?.forEach((cf) => {
           if (cf.value)
             htmlOut += ` · <a href="${cf.value}">${
